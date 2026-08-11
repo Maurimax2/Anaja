@@ -1,0 +1,46 @@
+[
+  {
+    "slug": "lighting",
+    "name_ar": "إضاءة",
+    "tagline_ar": "ثريات كريستال وبلافون LED",
+    "cover": "lighting-gold-crystal-02",
+    "size": "large"
+  },
+  {
+    "slug": "vanity",
+    "name_ar": "أثاث الحمام",
+    "tagline_ar": "وحدات مغاسل بأسطح رخام",
+    "cover": "vanity-grey-stone-01",
+    "size": "wide"
+  },
+  {
+    "slug": "tap",
+    "name_ar": "خلاطات ومغاسل",
+    "tagline_ar": "خلاطات وأعمدة دش",
+    "cover": "tap-shower-column-01",
+    "size": "tall"
+  },
+  {
+    "slug": "mirror",
+    "name_ar": "مرايا",
+    "tagline_ar": "مرايا LED بإضاءة خلفية",
+    "cover": "mirror-led-02",
+    "size": "wide"
+  },
+  {
+    "slug": "decor",
+    "name_ar": "ديكور",
+    "tagline_ar": "قريبًا",
+    "cover": null,
+    "size": "wide",
+    "hidden": true
+  },
+  {
+    "slug": "furniture",
+    "name_ar": "أثاث",
+    "tagline_ar": "قريبًا",
+    "cover": null,
+    "size": "wide",
+    "hidden": true
+  }
+]

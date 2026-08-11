@@ -1,4 +1,8 @@
 .DS_Store
 __MACOSX/
 node_modules/
-assets/products/
+
+# صور PNG الوسيطة — كبيرة الحجم ويُعاد توليدها بالأمر:
+#   python3 scripts/prepare-images.py
+# الموقع يستعمل ملفات .webp المرفوعة في المستودع.
+assets/products/*.png
