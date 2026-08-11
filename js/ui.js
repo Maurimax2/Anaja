@@ -4,7 +4,7 @@
 
 import { CONFIG } from './config.js';
 import * as cart from './cart.js';
-import { imgFull, imgThumb, formatPrice, hasPrice, esc } from './store.js';
+import { imgFull, imgThumb, formatPrice, hasPrice, isCatalogueMode, esc } from './store.js';
 
 /* ── شارة السلّة ─────────────────────────────────────────────────────────── */
 function bindCartBadge() {
@@ -105,6 +105,14 @@ export function toast(message, kind = 'ok') {
 export function productCard(product, { eager = false } = {}) {
   const img = product.images[0];
   const priced = hasPrice(product);
+
+  // في وضع الكتالوج تُحذف سطور السعر من البطاقات: تكرار «السعر عند الطلب»
+  // عشرين مرّة في شبكة واحدة ضجيج بلا فائدة.
+  const priceLine = isCatalogueMode() ? '' : `
+          <span class="card__price${priced ? '' : ' card__price--request'}">
+            ${esc(formatPrice(product))}
+          </span>`;
+
   return `
     <article class="card" data-reveal>
       <a class="card__link" href="product.html?id=${encodeURIComponent(product.id)}">
@@ -117,10 +125,7 @@ export function productCard(product, { eager = false } = {}) {
                loading="${eager ? 'eager' : 'lazy'}" decoding="async">
         </span>
         <span class="card__body">
-          <h3 class="card__title">${esc(product.name_ar)}</h3>
-          <span class="card__price${priced ? '' : ' card__price--request'}">
-            ${esc(formatPrice(product))}
-          </span>
+          <h3 class="card__title">${esc(product.name_ar)}</h3>${priceLine}
         </span>
       </a>
     </article>`;

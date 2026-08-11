@@ -49,6 +49,18 @@ export function hasPrice(product) {
   return typeof product.price === 'number' && product.price > 0;
 }
 
+/**
+ * «وضع الكتالوج»: لا يوجد أي منتج له سعر.
+ * في هذه الحالة يختفي المجموع من السلّة ومن رسالة الواتساب، ويختفي
+ * الترتيب حسب السعر — لأنّ عرض «الإجمالي: 0 أوقية» أسوأ من عدم عرضه.
+ *
+ * يُحسَب من البيانات نفسها، فبمجرّد أن يضيف صاحب المحل سعرًا واحدًا في
+ * products.json يعود كل ما سبق للظهور تلقائيًا بدون تعديل أي كود.
+ */
+export function isCatalogueMode() {
+  return _cache ? _cache.products.every(p => !hasPrice(p)) : false;
+}
+
 const NUM = new Intl.NumberFormat('ar-MR', { maximumFractionDigits: 0 });
 
 /** يصوغ رقمًا بالفواصل العربية، مثل ١٢٬٥٠٠ */

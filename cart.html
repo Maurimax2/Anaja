@@ -80,7 +80,7 @@
           <img src="assets/logo/logo-neon.png" alt="القابضة للتجارة والخدمات" width="848" height="516">
         </div>
         <p class="footer__note">
-          معرض متخصّص في الإضاءة والأدوات الصحية في نواكشوط. الطلبات تُستقبل
+          معرض متخصّص في الإضاءة وتجهيزات الحمام في نواكشوط. الطلبات تُستقبل
           عبر الواتساب، والتوصيل داخل المدينة.
         </p>
       </div>
@@ -120,7 +120,7 @@
 
 <script type="module">
 import { loadCatalogue, imgThumb, formatNumber, formatPrice,
-         hasPrice, esc } from './js/store.js';
+         hasPrice, isCatalogueMode, esc } from './js/store.js';
 import { initChrome, toast, showError } from './js/ui.js';
 import { CONFIG, T } from './js/config.js';
 import * as cart from './js/cart.js';
@@ -157,7 +157,7 @@ try {
                 <a class="line__name" href="product.html?id=${encodeURIComponent(l.product.id)}">
                   ${esc(l.product.name_ar)}
                 </a>
-                <span class="line__unit">${esc(formatPrice(l.product))}</span>
+                ${isCatalogueMode() ? '' : `<span class="line__unit">${esc(formatPrice(l.product))}</span>`}
                 <div class="qty">
                   <button type="button" data-step="-1" aria-label="إنقاص الكمّية">−</button>
                   <input type="number" value="${l.qty}" min="1" max="99"
@@ -166,11 +166,12 @@ try {
                 </div>
               </div>
               <div class="line__end">
+                ${isCatalogueMode() ? '' : `
                 <span class="line__sum">${
                   hasPrice(l.product)
                     ? esc(`${formatNumber(l.product.price * l.qty)} ${CONFIG.CURRENCY_AR}`)
                     : '—'
-                }</span>
+                }</span>`}
                 <button class="line__rm" type="button" data-rm>حذف</button>
               </div>
             </div>`).join('')}
@@ -182,15 +183,19 @@ try {
             <span class="muted">عدد القطع</span>
             <span style="font-variant-numeric: tabular-nums;">${formatNumber(itemCount)}</span>
           </div>
-          ${unpriced ? `
+          ${isCatalogueMode() ? `
           <p class="notice small">
-            ${formatNumber(unpriced)} من المنتجات سعرها عند الطلب، ولم تُحتسب في
-            المجموع. سنتفق على سعرها معك على الواتساب.
-          </p>` : ''}
-          <div class="summary__total">
-            <span>المجموع</span>
-            <span>${esc(`${formatNumber(sum)} ${CONFIG.CURRENCY_AR}`)}</span>
-          </div>
+            الأسعار تُحدَّد عند الطلب. أرسل طلبك وسنردّ عليك بالسعر والتوفّر.
+          </p>` : `
+            ${unpriced ? `
+            <p class="notice small">
+              ${formatNumber(unpriced)} من المنتجات سعرها عند الطلب، ولم تُحتسب في
+              المجموع. سنتفق على سعرها معك على الواتساب.
+            </p>` : ''}
+            <div class="summary__total">
+              <span>المجموع</span>
+              <span>${esc(`${formatNumber(sum)} ${CONFIG.CURRENCY_AR}`)}</span>
+            </div>`}
           <a class="btn btn--primary btn--block btn--lg" href="checkout.html">
             إتمام الطلب
           </a>

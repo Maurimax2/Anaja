@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>المتجر — القابضة للتجارة والخدمات</title>
-<meta name="description" content="تصفّح كل منتجات معرض القابضة: إضاءة، أثاث حمام، خلاطات ومغاسل، ومرايا. رتّب حسب السعر وابحث بالاسم.">
+<meta name="description" content="تصفّح كل منتجات معرض القابضة: إضاءة، أثاث حمام، خلاطات ومغاسل، ومرايا. ابحث بالاسم واطلب على الواتساب.">
 <meta name="theme-color" content="#1B1630">
 <link rel="canonical" href="./shop.html">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="القابضة للتجارة والخدمات">
 <meta property="og:title" content="المتجر — القابضة للتجارة والخدمات">
-<meta property="og:description" content="تصفّح كل منتجات معرض القابضة: إضاءة، أثاث حمام، خلاطات ومغاسل، ومرايا. رتّب حسب السعر وابحث بالاسم.">
+<meta property="og:description" content="تصفّح كل منتجات معرض القابضة: إضاءة، أثاث حمام، خلاطات ومغاسل، ومرايا. ابحث بالاسم واطلب على الواتساب.">
 <meta property="og:image" content="assets/logo/logo-original.jpg">
 <meta property="og:locale" content="ar_MR">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,8 +69,8 @@
 
     <div class="stack" style="padding-block: var(--s-5) var(--s-4);">
       <h1>المتجر</h1>
-      <p class="lede">كل ما يعرضه المحل في مكان واحد. اختر القسم، رتّب حسب
-      السعر، أو ابحث باسم المنتج.</p>
+      <p class="lede">كل ما يعرضه المحل في مكان واحد. اختر القسم أو ابحث باسم
+      المنتج، ثمّ أرسل طلبك على الواتساب ونردّ عليك بالسعر والتوفّر.</p>
     </div>
 
     <div class="chips" id="chips" role="group" aria-label="تصفية حسب القسم"></div>
@@ -106,7 +106,7 @@
           <img src="assets/logo/logo-neon.png" alt="القابضة للتجارة والخدمات" width="848" height="516">
         </div>
         <p class="footer__note">
-          معرض متخصّص في الإضاءة والأدوات الصحية في نواكشوط. الطلبات تُستقبل
+          معرض متخصّص في الإضاءة وتجهيزات الحمام في نواكشوط. الطلبات تُستقبل
           عبر الواتساب، والتوصيل داخل المدينة.
         </p>
       </div>
@@ -145,7 +145,8 @@
 
 
 <script type="module">
-import { loadCatalogue, visibleCategories, hasPrice, param, esc } from './js/store.js';
+import { loadCatalogue, visibleCategories, hasPrice, isCatalogueMode,
+         param, esc } from './js/store.js';
 import { initChrome, productCard, revealNew, showError } from './js/ui.js';
 
 initChrome();
@@ -220,6 +221,10 @@ try {
   all = data.products;
   cats = data.categories;
   if (activeCat !== 'all' && !cats.some(c => c.slug === activeCat)) activeCat = 'all';
+  // بلا أسعار لا معنى للترتيب حسب السعر
+  if (isCatalogueMode()) {
+    sortEl.querySelectorAll('option[value^="price-"]').forEach(o => o.remove());
+  }
   paintChips();
   render();
 } catch (err) {

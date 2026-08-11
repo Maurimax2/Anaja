@@ -80,7 +80,7 @@
           <img src="assets/logo/logo-neon.png" alt="القابضة للتجارة والخدمات" width="848" height="516">
         </div>
         <p class="footer__note">
-          معرض متخصّص في الإضاءة والأدوات الصحية في نواكشوط. الطلبات تُستقبل
+          معرض متخصّص في الإضاءة وتجهيزات الحمام في نواكشوط. الطلبات تُستقبل
           عبر الواتساب، والتوصيل داخل المدينة.
         </p>
       </div>
@@ -120,7 +120,7 @@
 
 <script type="module">
 import { loadCatalogue, formatNumber, priceForMessage,
-         hasPrice, esc } from './js/store.js';
+         hasPrice, isCatalogueMode, esc } from './js/store.js';
 import { initChrome, toast, showError } from './js/ui.js';
 import { CONFIG } from './js/config.js';
 import * as cart from './js/cart.js';
@@ -131,15 +131,16 @@ const view = document.getElementById('view');
 /* يبني نصّ الطلب بالعربية ثم يفتحه في واتساب. */
 function buildMessage(form, lines, sum, unpriced) {
   const dash = '---------------------------';
+  const catalogue = isCatalogueMode();
+
   const items = lines.map((l, i) => {
+    const base = `${i + 1}. ${l.product.name_ar} — الكمية: ${l.qty}`;
+    if (catalogue) return base;
     const price = hasPrice(l.product)
       ? `${l.product.price.toLocaleString('en-US')} ${CONFIG.CURRENCY}`
       : priceForMessage(l.product);
-    return `${i + 1}. ${l.product.name_ar} — الكمية: ${l.qty} — السعر: ${price}`;
+    return `${base} — السعر: ${price}`;
   }).join('\n');
-
-  const total = `${sum.toLocaleString('en-US')} ${CONFIG.CURRENCY}`
-    + (unpriced ? `  (عدا ${unpriced} منتج سعرها عند الطلب)` : '');
 
   const parts = [
     `🛒 طلب جديد من موقع ${CONFIG.BRAND_AR}`,
@@ -152,8 +153,17 @@ function buildMessage(form, lines, sum, unpriced) {
     'المنتجات:',
     items,
     dash,
-    `الإجمالي: ${total}`,
   ];
+
+  // بلا أسعار لا يُكتب سطر إجمالي — «الإجمالي: 0 MRU» أسوأ من غيابه
+  if (catalogue) {
+    parts.push('الرجاء تأكيد الأسعار والتوفّر.');
+  } else {
+    const total = `${sum.toLocaleString('en-US')} ${CONFIG.CURRENCY}`
+      + (unpriced ? `  (عدا ${unpriced} منتج سعرها عند الطلب)` : '');
+    parts.push(`الإجمالي: ${total}`);
+  }
+
   if (form.notes) parts.push(`ملاحظات: ${form.notes}`);
   return parts.join('\n');
 }
@@ -251,24 +261,29 @@ try {
           ${lines.map(l => `
             <div class="summary__row">
               <span>${esc(l.product.name_ar)} <span class="muted">×${l.qty}</span></span>
+              ${isCatalogueMode() ? '' : `
               <span style="font-variant-numeric: tabular-nums; white-space: nowrap;">${
                 hasPrice(l.product)
                   ? esc(formatNumber(l.product.price * l.qty))
                   : '—'
-              }</span>
+              }</span>`}
             </div>`).join('')}
           <div class="summary__row" style="border-top:1px solid var(--c-line); padding-top: var(--s-3);">
             <span class="muted">عدد القطع</span>
             <span style="font-variant-numeric: tabular-nums;">${formatNumber(itemCount)}</span>
           </div>
-          ${unpriced ? `
+          ${isCatalogueMode() ? `
           <p class="notice small">
-            ${formatNumber(unpriced)} من المنتجات سعرها عند الطلب ولم تُحتسب في المجموع.
-          </p>` : ''}
-          <div class="summary__total">
-            <span>الإجمالي</span>
-            <span>${esc(`${formatNumber(sum)} ${CONFIG.CURRENCY_AR}`)}</span>
-          </div>
+            الأسعار تُحدَّد عند الطلب. سنردّ عليك بالسعر والتوفّر بعد استلام طلبك.
+          </p>` : `
+            ${unpriced ? `
+            <p class="notice small">
+              ${formatNumber(unpriced)} من المنتجات سعرها عند الطلب ولم تُحتسب في المجموع.
+            </p>` : ''}
+            <div class="summary__total">
+              <span>الإجمالي</span>
+              <span>${esc(`${formatNumber(sum)} ${CONFIG.CURRENCY_AR}`)}</span>
+            </div>`}
         </aside>
       </div>`;
 

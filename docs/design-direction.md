@@ -1,8 +1,8 @@
 # Design direction — القابضة للتجارة والخدمات
 
-Status: **awaiting sign-off.** Pages are not built yet. This document records what the
-source files actually contain, the palette derived from the logo, and the four decisions
-that need an answer before the build starts.
+Status: **signed off and built.** This document records what the source files actually
+contain, the palette derived from the logo, and how each of the four open decisions was
+resolved. Later client corrections are in §7.
 
 Visual version of this document: published as an artifact in the originating session.
 
@@ -114,7 +114,8 @@ The brief lists lighting, ceramics, decor and furniture. All 33 photos reviewed:
 | Ceramics / decor / furniture | 0 | Not stocked. Marble tile appears only as showroom floor and wall. |
 
 The logo agrees with the photographs: a **faucet** and a **lightning bolt**. This is a
-plumbing-and-electrical showroom, not a decor boutique.
+lighting and bathroom-fittings showroom, not a decor boutique. (The client has since
+confirmed they do not sell sanitary ware as such — see §7.)
 
 The photographs are in-situ phone shots — stacked cartons, showroom mirrors, staff
 reflected in them. They are **not** catalogue cutouts, which is why the brief's
@@ -133,11 +134,24 @@ reflected in them. They are **not** catalogue cutouts, which is why the brief's
    tiles where they don't, one card component handling both; `prepare-images.py` gets a
    `--frame-only` mode.*
 
-3. **Prices** — nothing in the archive carries one. A WhatsApp order quoting an invented
-   total is worse than no price. *Recommended: build a `"price": null` path rendering
-   "السعر عند الطلب" and omitting the total from the order message.*
+3. **Prices** — ~~nothing in the archive carries one~~ **Resolved:** the client asked for
+   all prices to be removed. Every product is `"price": null` and the site runs in
+   catalogue mode — no prices on cards, no cart total, and the WhatsApp message carries
+   "الرجاء تأكيد الأسعار والتوفّر." instead of a total. The mode is computed from the data
+   (`isCatalogueMode()` in `js/store.js`), so entering a single price in `products.json`
+   restores prices, totals and price-sorting with no code change.
 
 4. **Photo rights** — two images carry a **HYSHIN** supplier watermark and several are
-   manufacturer catalogue renders rather than the client's own work; two showroom photos
-   contain **identifiable staff faces** reflected in mirrors. *Recommended: exclude both
-   sets from the seed data pending confirmation.*
+   manufacturer catalogue renders rather than the client's own work; four showroom photos
+   contain **identifiable staff faces** reflected in mirrors. **Resolved:** all six are
+   quarantined in `raw-images/_review/`, prefixed `WATERMARK-` or `FACE-`.
+
+---
+
+## 7. Later corrections
+
+- **"أدوات صحية" removed.** The client states they do not sell sanitary ware. All
+  occurrences replaced with **"تجهيزات الحمام"** (bathroom fittings), which covers the
+  vanities, taps and mirrors actually stocked without claiming the plumbing-supplies
+  trade. Affects page titles, `og:title`, meta descriptions, the hero headline, the
+  about copy and the footer note.
