@@ -1,0 +1,98 @@
+/* ==========================================================================
+   القابضة للتجارة والخدمات — Design tokens
+   Every colour below is derived from assets/logo/logo-original.jpg.
+   Sampling method: every 2nd pixel, binned in 10° hue steps, filtered to
+   saturation > 0.25 and value > 0.30 to discard the navy ground and the
+   blown-out glow cores.
+   ========================================================================== */
+
+:root {
+  /* --- Surfaces ---------------------------------------------------------
+     Warm neutrals. The stock is white ceramic, chrome and crystal shot
+     against warm wood; a warm ground flatters all three. */
+  --c-bone:      #FAF8F5;   /* page ground                                 */
+  --c-sand:      #F1EAE0;   /* product tile, soft panel                    */
+  --c-sand-deep: #E7DCCC;   /* tile hover, full-bleed band                 */
+  --c-white:     #FFFFFF;   /* raised card                                 */
+
+  /* --- Ink -------------------------------------------------------------
+     Indigo-biased rather than neutral charcoal: descended from the logo
+     ground #14092B, which keeps brass warm against it. */
+  --c-ink:       #1B1630;   /* header, footer, headings   16.45:1 on bone  */
+  --c-body:      #3A3348;   /* running text               11.34:1 on bone  */
+  --c-muted:     #6B6478;   /* captions, meta              5.33:1 on bone  */
+
+  /* --- Accents ---------------------------------------------------------
+     The logo carries no gold. Brass is the amber bolt (#F0951B) pulled
+     down in lightness until it clears 4.5:1 as text; teal is the cyan
+     wordmark (#2FD4DC) given the same treatment. */
+  --c-brass:     #8A6212;   /* accent, price, primary CTA  5.16:1 on bone  */
+  --c-brass-lt:  #B98A22;   /* brass on ink surfaces                       */
+  --c-teal:      #0E6A72;   /* link, focus ring            5.96:1 on bone  */
+
+  /* --- Lines ----------------------------------------------------------- */
+  --c-line:      #E2D9CC;   /* 1px hairline — used instead of shadow       */
+  --c-line-ink:  #2E2743;   /* hairline on ink surfaces                    */
+
+  /* --- Raw logo values --------------------------------------------------
+     Full-strength neon. Legible ONLY on ink surfaces (cyan 10.25:1 and
+     amber 7.99:1 on --c-ink; on bone they fall to 1.71:1 and 2.20:1).
+     Never place these on a light ground. */
+  --c-neon-cyan:  #2FD4DC;
+  --c-neon-blue:  #2B4FC0;
+  --c-neon-amber: #F0951B;
+  --c-neon-core:  #FFC845;
+  --c-neon-ink:   #14092B;  /* the logo's own background                   */
+
+  /* --- Semantic --------------------------------------------------------- */
+  --c-ok:        #0E6A72;
+  --c-warn:      #8A6212;
+  --c-error:     #A63A26;
+
+  /* --- Type -------------------------------------------------------------
+     Plex Arabic over Tajawal because it carries a true 500 and 600, so
+     hierarchy can be built from weight rather than size alone. */
+  --f-sans: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-xs:   0.75rem;   /* 12px — labels, meta          */
+  --fs-sm:   0.875rem;  /* 14px — captions              */
+  --fs-base: 1rem;      /* 16px — body                  */
+  --fs-md:   1.125rem;  /* 18px — lede                  */
+  --fs-lg:   1.375rem;  /* 22px — price, card title     */
+  --fs-xl:   1.75rem;   /* 28px — section heading       */
+  --fs-2xl:  2.25rem;   /* 36px — page heading          */
+  --fs-3xl:  3rem;      /* 48px — hero                  */
+
+  /* Arabic needs vertical room that Latin does not. */
+  --lh-tight: 1.35;
+  --lh-body:  1.95;
+  --lh-loose: 2.05;
+
+  --ls-label: 0.12em;   /* uppercase Latin labels only  */
+
+  /* --- Space ------------------------------------------------------------
+     4px base. Layout uses flex/grid `gap`, never per-element margins. */
+  --s-1: 0.25rem;  --s-2: 0.5rem;   --s-3: 0.75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;   --s-6: 2rem;     --s-7: 3rem;     --s-8: 4rem;
+  --s-9: 6rem;
+
+  /* --- Geometry --------------------------------------------------------- */
+  --r-tile: 4px;        /* product tile — restrained, not rounded-lg       */
+  --r-btn:  2px;
+  --measure: 68ch;      /* running-text width                              */
+
+  /* --- Motion -----------------------------------------------------------
+     Subtle only. Image scale on hover, hairline draw on category tiles,
+     IntersectionObserver fade-ins. Nothing bouncy. */
+  --t-fast: 180ms;
+  --t-base: 280ms;
+  --t-slow: 400ms;
+  --ease:   cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows appear on hover only, never at rest. */
+  --sh-hover: 0 6px 24px rgba(27, 22, 48, 0.10);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-fast: 0ms; --t-base: 0ms; --t-slow: 0ms; }
+}
